@@ -26,36 +26,67 @@ to<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewpor
 <section class="workspace downloader-workspace" id="instagram-downloader"><div class="head"><div><small class="eyebrow">IN DEVELOPMENT · PUBLIC CONTENT ONLY</small><h2>Instagram Reels Downloader</h2><p>Paste a public Instagram Reel link. The download service is not connected yet; we will enable downloads only after a permitted, working backend is configured.</p></div><span class="pill beta">Backend pending</span></div><div class="panel link-panel"><label for="instagramUrl">Public Instagram Reel URL</label><input id="instagramUrl" type="url" placeholder="https://www.instagram.com/reel/..." disabled><button class="btn" disabled>Instagram helper coming next</button><small>Private accounts and login-protected content are not supported.</small></div></section>
 <section id="how" class="section centered"><small class="eyebrow">BUILT FOR SIMPLICITY</small><h2>Three steps. No complicated setup.</h2><div class="steps"><div><b>01</b><h3>Choose</h3><p>Select the tool that matches your task.</p></div><div><b>02</b><h3>Process</h3><p>Use the controls and preview the result.</p></div><div><b>03</b><h3>Save</h3><p>Download the result to your device.</p></div></div></section>
 <section class="notice" id="privacy"><b>⌑</b><div><h3>Your privacy matters</h3><p>Image compression and video preview run locally in your browser. This starter version does not upload your selected files to a server. Downloader tools will explain when an external service is required and will only support content that may lawfully be downloaded.</p></div></section></main><footer><a class="brand" href="#"><i>▶</i> VideoTools <b>Pro</b></a><span>Free media tools, made simple.</span><span>© <span id="year"></span> VideoTools Pro</span></footer><script src="app.js"></script>
+
 <script>
 (function(){
-  const input=document.getElementById('tiktokUrl');
-  const check=document.getElementById('checkTikTok');
-  const open=document.getElementById('openTikTok');
-  const status=document.getElementById('tiktokStatus');
-  if(!input||!check||!open||!status)return;
-  let validUrl='';
-  function validateTikTok(value){
-    try{
-      const u=new URL(value.trim());
-      const host=u.hostname.toLowerCase().replace(/^www\\./,'');
-      const allowed=['tiktok.com','m.tiktok.com','vm.tiktok.com','vt.tiktok.com'];
-      if(u.protocol!=='https:'||!allowed.includes(host))return null;
-      if(host==='tiktok.com'&&!(/^\\/@[^/]+\\/video\\/\\d+/.test(u.pathname)||/^\\/t\\//.test(u.pathname)))return null;
-      return u.href;
-    }catch(e){return null;}
-  }
-  check.addEventListener('click',function(){
-    const found=validateTikTok(input.value);
-    validUrl=found||'';
-    open.disabled=!validUrl;
-    status.textContent=validUrl
-      ? 'Link format looks valid. Open the original video on TikTok, then use Share → Save video if the creator has enabled downloads.'
-      : 'This does not look like a supported TikTok video link. Paste a full https://www.tiktok.com/... link.';
+  const input = document.getElementById('tiktokUrl');
+  const check = document.getElementById('checkTikTok');
+  const open = document.getElementById('openTikTok');
+  const status = document.getElementById('tiktokStatus');
+
+  if (!input || !check || !open || !status) return;
+
+  let validUrl = '';
+
+  check.addEventListener('click', async function(){
+    const value = input.value.trim();
+
+    if (!value) {
+      status.textContent = 'Please paste a TikTok video link.';
+      return;
+    }
+
+    check.disabled = true;
+    open.disabled = true;
+    status.textContent = 'Checking TikTok link...';
+
+    try {
+      const response = await fetch('/.netlify/functions/tiktok-check', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({url: value})
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.valid) {
+        throw new Error(result.message || 'Invalid TikTok link.');
+      }
+
+      validUrl = result.url;
+      open.disabled = false;
+      status.textContent = result.message;
+
+    } catch (error) {
+      validUrl = '';
+      status.textContent = error.message || 'Could not check link. Please try again.';
+    } finally {
+      check.disabled = false;
+    }
   });
-  input.addEventListener('input',function(){validUrl='';open.disabled=true;status.textContent='Press “Check link” to validate the address.';});
-  open.addEventListener('click',function(){
-    if(validUrl)window.open(validUrl,'_blank','noopener,noreferrer');
+
+  input.addEventListener('input', function(){
+    validUrl = '';
+    open.disabled = true;
+    status.textContent = 'Press Check link to validate.';
+  });
+
+  open.addEventListener('click', function(){
+    if (validUrl) {
+      window.open(validUrl, '_blank', 'noopener,noreferrer');
+    }
   });
 })();
 </script>
+
 </body></html>
