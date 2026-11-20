@@ -1,6 +1,11 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Free browser-based video and image tools. Compress images and preview local videos with VideoTools Pro."><meta name="theme-color" content="#10142a"><title>VideoTools Pro — Free Online Media Tools</title><link rel="stylesheet" href="style.css">
 <style>
 .link-panel{display:grid;gap:12px;max-width:760px}.link-panel label{font-size:13px;font-weight:700;color:#171a31}.link-panel input{width:100%;padding:14px;border:1px solid #e2e4ee;border-radius:10px;font:inherit;background:#f7f8fc;color:#777}.link-panel button:disabled{opacity:.65;cursor:not-allowed}.link-panel small{font-size:11px;line-height:1.7;color:#858a9e}.downloader-workspace{padding-top:38px;padding-bottom:38px}
+
+.link-actions{display:flex;gap:10px;flex-wrap:wrap}
+.secondary-btn{background:#20294b}
+.tool-status{margin:0;font-size:13px;color:#686f86;line-height:1.6}
+@media(max-width:480px){.link-actions{flex-direction:column}.link-actions button{width:100%}}
 </style></head><body>
 <header><a class="brand" href="#"><i>▶</i> VideoTools <b>Pro</b></a><nav><a href="#tools">Tools</a><a href="#how">How it works</a><a href="#privacy">Privacy</a></nav><a class="navbtn" href="#tools">Explore tools ↗</a></header>
 <main><section class="hero"><div><small class="eyebrow">✦ SIMPLE · FAST · BROWSER-BASED</small><h1>Your media.<br><em>Made easier.</em></h1><p>Free image tools and a growing set of public-link video utilities in one clean workspace.</p><a class="btn" href="#tools">Explore free tools →</a><p class="trust">✓ No sign-up　 ✓ Local processing for supported tools</p></div><div class="art"><div class="orb"></div><div class="mock"><small>● ● ●　 YOUR WORKSPACE</small><div class="screen"><span>▶</span></div><b>Ready when you are ✦</b></div><label>✦ Free tools</label></div></section>
@@ -17,7 +22,40 @@
 </div></section>
 <section class="workspace" id="image-compressor"><div class="head"><div><small class="eyebrow">READY TO USE</small><h2>Image Compressor</h2><p>Choose an image, set quality, and download a smaller copy. Processing happens on this device.</p></div><span class="pill">● Available now</span></div><div class="panel"><label class="drop" for="imageInput"><strong>↑</strong><b>Choose an image to compress</b><small>JPG, PNG or WebP · Select from your device</small><span class="btn">Choose image</span></label><input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" hidden><div id="imageControls" class="hidden"><div class="line"><div><b id="imageName"></b><small id="imageOriginal"></small></div><button id="clearImage">Remove</button></div><div class="line quality"><label for="quality">Output quality</label><b id="qualityValue">78%</b></div><input id="quality" type="range" min="20" max="100" value="78"><div class="previews"><div><small>ORIGINAL</small><img id="originalPreview" alt="Original image preview"></div><div><small>COMPRESSED</small><img id="compressedPreview" alt="Compressed image preview"></div></div><div class="line result"><span id="imageResult">Adjust quality to prepare your image.</span><button class="btn" id="downloadImage" disabled>Download image ↓</button></div></div></div></section>
 <section class="workspace" id="video-preview"><div class="head"><div><small class="eyebrow">LOCAL FILE TOOL</small><h2>Video Preview & Details</h2><p>Preview a video stored on your phone or computer. The file is not uploaded to this website.</p></div><span class="pill beta">● Beta</span></div><div class="panel"><label class="drop compact" for="videoInput"><strong>↑</strong><b>Select a video file</b><small>MP4, WebM, MOV and other browser-supported formats</small><span class="btn">Choose video</span></label><input id="videoInput" type="file" accept="video/*" hidden><div id="videoControls" class="hidden"><video id="videoPlayer" controls playsinline></video><p><b id="videoName"></b><br><small id="videoInfo"></small></p><button id="clearVideo">Remove video</button></div></div></section>
-<section class="workspace downloader-workspace" id="tiktok-downloader"><div class="head"><div><small class="eyebrow">IN DEVELOPMENT · PUBLIC CONTENT ONLY</small><h2>TikTok Downloader</h2><p>Paste a public TikTok video link. The download service is not connected yet, so this page will not claim to download a video until the backend is ready.</p></div><span class="pill beta">Backend pending</span></div><div class="panel link-panel"><label for="tiktokUrl">Public TikTok video URL</label><input id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@creator/video/..." disabled><button class="btn" disabled>Downloader connection coming next</button><small>Private videos, login-protected content and access-control bypasses are not supported.</small></div></section>
-<section class="workspace downloader-workspace" id="instagram-downloader"><div class="head"><div><small class="eyebrow">IN DEVELOPMENT · PUBLIC CONTENT ONLY</small><h2>Instagram Reels Downloader</h2><p>Paste a public Instagram Reel link. The download service is not connected yet; we will enable downloads only after a permitted, working backend is configured.</p></div><span class="pill beta">Backend pending</span></div><div class="panel link-panel"><label for="instagramUrl">Public Instagram Reel URL</label><input id="instagramUrl" type="url" placeholder="https://www.instagram.com/reel/..." disabled><button class="btn" disabled>Downloader connection coming next</button><small>Private accounts and login-protected content are not supported.</small></div></section>
+<section class="workspace downloader-workspace" id="tiktok-downloader"><div class="head"><div><small class="eyebrow">IN DEVELOPMENT · PUBLIC CONTENT ONLY</small><h2>TikTok Downloader</h2><p>Paste a public TikTok video link. The download service is not connected yet, so this page will not claim to download a video until the backend is ready.</p></div><span class="pill beta">Backend pending</span></div><div class="panel link-panel"><label for="tiktokUrl">TikTok video link</label><input id="tiktokUrl" type="url" inputmode="url" placeholder="https://www.tiktok.com/@creator/video/..."><div class="link-actions"><button class="btn" id="checkTikTok" type="button">Check link</button><button class="btn secondary-btn" id="openTikTok" type="button" disabled>Open TikTok video ↗</button></div><p id="tiktokStatus" class="tool-status" aria-live="polite">Paste a TikTok video link to check it.</p><small>This helper opens the original video on TikTok. If the creator allows downloads, use TikTok’s own Share / Save video option. It does not bypass privacy settings or create a direct MP4 download.</small></div></section>
+<section class="workspace downloader-workspace" id="instagram-downloader"><div class="head"><div><small class="eyebrow">IN DEVELOPMENT · PUBLIC CONTENT ONLY</small><h2>Instagram Reels Downloader</h2><p>Paste a public Instagram Reel link. The download service is not connected yet; we will enable downloads only after a permitted, working backend is configured.</p></div><span class="pill beta">Backend pending</span></div><div class="panel link-panel"><label for="instagramUrl">Public Instagram Reel URL</label><input id="instagramUrl" type="url" placeholder="https://www.instagram.com/reel/..." disabled><button class="btn" disabled>Instagram helper coming next</button><small>Private accounts and login-protected content are not supported.</small></div></section>
 <section id="how" class="section centered"><small class="eyebrow">BUILT FOR SIMPLICITY</small><h2>Three steps. No complicated setup.</h2><div class="steps"><div><b>01</b><h3>Choose</h3><p>Select the tool that matches your task.</p></div><div><b>02</b><h3>Process</h3><p>Use the controls and preview the result.</p></div><div><b>03</b><h3>Save</h3><p>Download the result to your device.</p></div></div></section>
-<section class="notice" id="privacy"><b>⌑</b><div><h3>Your privacy matters</h3><p>Image compression and video preview run locally in your browser. This starter version does not upload your selected files to a server. Downloader tools will explain when an external service is required and will only support content that may lawfully be downloaded.</p></div></section></main><footer><a class="brand" href="#"><i>▶</i> VideoTools <b>Pro</b></a><span>Free media tools, made simple.</span><span>© <span id="year"></span> VideoTools Pro</span></footer><script src="app.js"></script></body></html>
+<section class="notice" id="privacy"><b>⌑</b><div><h3>Your privacy matters</h3><p>Image compression and video preview run locally in your browser. This starter version does not upload your selected files to a server. Downloader tools will explain when an external service is required and will only support content that may lawfully be downloaded.</p></div></section></main><footer><a class="brand" href="#"><i>▶</i> VideoTools <b>Pro</b></a><span>Free media tools, made simple.</span><span>© <span id="year"></span> VideoTools Pro</span></footer><script src="app.js"></script>
+<script>
+(function(){
+  const input=document.getElementById('tiktokUrl');
+  const check=document.getElementById('checkTikTok');
+  const open=document.getElementById('openTikTok');
+  const status=document.getElementById('tiktokStatus');
+  if(!input||!check||!open||!status)return;
+  let validUrl='';
+  function validateTikTok(value){
+    try{
+      const u=new URL(value.trim());
+      const host=u.hostname.toLowerCase().replace(/^www\\./,'');
+      const allowed=['tiktok.com','m.tiktok.com','vm.tiktok.com','vt.tiktok.com'];
+      if(u.protocol!=='https:'||!allowed.includes(host))return null;
+      if(host==='tiktok.com'&&!(/^\\/@[^/]+\\/video\\/\\d+/.test(u.pathname)||/^\\/t\\//.test(u.pathname)))return null;
+      return u.href;
+    }catch(e){return null;}
+  }
+  check.addEventListener('click',function(){
+    const found=validateTikTok(input.value);
+    validUrl=found||'';
+    open.disabled=!validUrl;
+    status.textContent=validUrl
+      ? 'Link format looks valid. Open the original video on TikTok, then use Share → Save video if the creator has enabled downloads.'
+      : 'This does not look like a supported TikTok video link. Paste a full https://www.tiktok.com/... link.';
+  });
+  input.addEventListener('input',function(){validUrl='';open.disabled=true;status.textContent='Press “Check link” to validate the address.';});
+  open.addEventListener('click',function(){
+    if(validUrl)window.open(validUrl,'_blank','noopener,noreferrer');
+  });
+})();
+</script>
+</body></html>
